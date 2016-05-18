@@ -29,31 +29,24 @@ class BackEndRequests : AnyObject {
         let url = NSURL(string: urlString.rawValue)
         let urlSessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         let urlSession = NSURLSession(configuration: urlSessionConfig)
+        let urlRequest: NSMutableURLRequest = NSMutableURLRequest(URL: url!)
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(urlRequest) {
+        (data, response, error) -> Void in
         
-        let task = urlSession.dataTaskWithURL(url!)
-        task.resume()
+        let httpResponse = response as! NSHTTPURLResponse
+        let statusCode = httpResponse.statusCode
         
+        if (statusCode == 200) {
+            self.gotData(data!)
+        }
     }
     
-//    @objc func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData data: NSData) {
-//        
-//        receivedData?.appendData(data)
-//        
-//    }
-//    
-//    @objc func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
-//        guard let receivedData = receivedData else
-//        {
-//            self.receivedData = nil
-//            return
-//        }
-//        if (error != nil){
-//            
-////            let data = NSJSONSerialization.dataWithJSONObject(receivedData, options: NSJSONWritingOptions.PrettyPrinted) as? [String:String]
-//            
-//        }
-//        
-//    }
+    task.resume()
+    
+    }
+    
+
     
 }
 
